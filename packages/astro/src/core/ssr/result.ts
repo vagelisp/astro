@@ -9,6 +9,8 @@ export interface CreateResultArgs {
 	params: Params;
 	pathname: string;
 	renderers: Renderer[];
+	links?: Set<SSRElement>;
+	scripts?: Set<SSRElement>;
 }
 
 export function createResult(args: CreateResultArgs): SSRResult {
@@ -19,8 +21,8 @@ export function createResult(args: CreateResultArgs): SSRResult {
 	// calling the render() function will populate the object with scripts, styles, etc.
 	const result: SSRResult = {
 		styles: new Set<SSRElement>(),
-		scripts: new Set<SSRElement>(),
-		links: new Set<SSRElement>(),
+		scripts: args.scripts ?? new Set<SSRElement>(),
+		links: args.links ?? new Set<SSRElement>(),
 		/** This function returns the `Astro` faux-global */
 		createAstro(astroGlobal: AstroGlobalPartial, props: Record<string, any>, slots: Record<string, any> | null) {
 			const site = new URL(origin);
